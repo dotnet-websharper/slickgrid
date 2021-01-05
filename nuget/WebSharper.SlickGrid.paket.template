@@ -11,10 +11,9 @@ description
 tags
     Web JavaScript F# C#
 files
-    ../WebSharper.SlickGrid/bin/Release/net461/WebSharper.SlickGrid.dll ==> lib/net461
-    ../WebSharper.SlickGrid/bin/Release/net461/WebSharper.SlickGrid.xml ==> lib/net461
     ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.dll ==> lib/netstandard2.0
     ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.xml ==> lib/netstandard2.0
 dependencies
-        WebSharper ~> LOCKEDVERSION:[3]
-        WebSharper.JQueryUI ~> LOCKEDVERSION:[3]
+    framework: netstandard2.0
+            WebSharper ~> LOCKEDVERSION:[3]
+            WebSharper.JQueryUI ~> LOCKEDVERSION:[3]
