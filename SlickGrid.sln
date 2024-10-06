@@ -1,12 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CAC6CF5-1A00-49B6-A840-586E3EEBC3C6}"
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
-		ivy.xml = ivy.xml
 	EndProjectSection
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "WebSharper.SlickGrid", "WebSharper.SlickGrid\WebSharper.SlickGrid.fsproj", "{B689DAD7-9D6F-4609-972E-3BCA18A53A0B}"

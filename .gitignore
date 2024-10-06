@@ -1,9 +1,10 @@
-packages/
-bin/
-obj/
-build/
-.vs/
+build/*
+packages/*
+WebSharper.slickgrid/bin/*
+WebSharper.slickgrid/obj/*
 *.suo
 .fake/
 paket-files/
 .vscode/
+.vs
+websharper.log

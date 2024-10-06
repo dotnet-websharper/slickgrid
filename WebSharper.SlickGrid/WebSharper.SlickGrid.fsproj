@@ -1,39 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <WebSharperProject>Extension</WebSharperProject>
     <WebSharperSourceMap>false</WebSharperSourceMap>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.fs" />
-    <EmbeddedResource Include="SlickGrid/lib/jquery.event.drag-2.2.js" />
-    <EmbeddedResource Include="SlickGrid/lib/jquery.event.drop-2.2.js" />
-    <EmbeddedResource Include="SlickGrid/slick.grid.css" />
-    <EmbeddedResource Include="SlickGrid/slick.grid.js" />
-    <EmbeddedResource Include="SlickGrid/slick.core.js" />
-    <EmbeddedResource Include="SlickGrid/slick.dataview.js" />
-    <EmbeddedResource Include="SlickGrid/slick.editors.js" />
-    <EmbeddedResource Include="SlickGrid/slick.formatters.js" />
-    <EmbeddedResource Include="SlickGrid/slick.groupitemmetadataprovider.js" />
-    <EmbeddedResource Include="SlickGrid/slick-default-theme.css" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.autotooltips.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.cellcopymanager.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.cellrangedecorator.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.cellrangeselector.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.cellselectionmodel.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.checkboxselectcolumn.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.headerbuttons.css" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.headerbuttons.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.headermenu.css" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.headermenu.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.rowmovemanager.js" />
-    <EmbeddedResource Include="SlickGrid/plugins/slick.rowselectionmodel.js" />
-    <EmbeddedResource Include="SlickGrid/controls/slick.columnpicker.css" />
-    <EmbeddedResource Include="SlickGrid/controls/slick.columnpicker.js" />
-    <EmbeddedResource Include="SlickGrid/controls/slick.pager.css" />
-    <EmbeddedResource Include="SlickGrid/controls/slick.pager.js" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="8.0.400" />
+    <PackageReference Include="WebSharper.Core" Version="7.0.6.454-beta5" />
+    <PackageReference Include="WebSharper.FSharp" Version="6.1.7.474" />
+  </ItemGroup>
+  <PropertyGroup>
+    <NpmDependencies>
+      <NpmPackage Name="slickgrid" Version="gt= 5.12.0 lt 6.0.0" ResolutionStrategy="Max" />
+    </NpmDependencies>
+  </PropertyGroup>
   <Import Project="..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets" Condition="Exists('..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets')" />
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
