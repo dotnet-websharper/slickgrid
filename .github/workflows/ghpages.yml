@@ -19,10 +19,10 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Setup .NET 10
+      - name: Setup .NET 9
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '10.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Install dependencies
         run: npm install
@@ -33,34 +33,28 @@ jobs:
 
       - name: Add credentials for Paket
         run:
-          dotnet paket config
+          dotnet tool run paket config
             add-credentials https://nuget.pkg.github.com/dotnet-websharper/index.json
             --username intellifactory-gh 
             --password ${{ secrets.PAT_PACKAGE }}
 
-      - name: Add GitHub registry NuGet source
-        run: 
-          dotnet nuget 
-            add source https://nuget.pkg.github.com/dotnet-websharper/index.json 
-            --name github 
-            --username intellifactory-gh 
-            --password ${{ secrets.PAT_PACKAGE }} 
-            --store-password-in-clear-text
-
       - name: Restore Dependencies Using Paket
-        run: dotnet paket restore
+        run: dotnet tool run paket restore
 
-      - name: Build WebSharper Project
-        run: |
-          dotnet build
-          npx vite build
+      - name: Build WebSharper.SlickGrid
+        run: dotnet build WebSharper.SlickGrid/WebSharper.SlickGrid.fsproj
+
+      - name: Build Sample Project in Release mode
+        run: dotnet build --configuration Release
         working-directory: ./WebSharper.SlickGrid.Test
 
-      - name: Verify Deployed Files
-        run: dir WebSharper.SlickGrid.Test/wwwroot/dist
+      - name: Prepare Deployment
+        run: |
+          mkdir -p dist
+          cp -r WebSharper.SlickGrid.Test/wwwroot/* dist/
 
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: WebSharper.SlickGrid.Test/wwwroot/dist
+          publish_dir: dist
