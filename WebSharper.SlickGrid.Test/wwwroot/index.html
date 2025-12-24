@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSharper.SlickGrid.Test</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Scripts/WebSharper.SlickGrid.Test.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] { display: none; }
+
+        :root {
+            font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        #myGrid {
+            width: 100%;
+            height: 500px;
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+    </style>
+    <script type="text/javascript" src="Scripts/WebSharper.SlickGrid.Test.head.js"></script>
+</head>
+<body>
+    <div id="myGrid" class="slick-container"></div>
+    <script type="module" src="Scripts/WebSharper.SlickGrid.Test.min.js"></script>
+</body>
+</html>

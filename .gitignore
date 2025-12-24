@@ -2,3 +2,6 @@
 bin
 obj
 *.log
+node_modules
+build
+/WebSharper.SlickGrid.Test/wwwroot/Scripts

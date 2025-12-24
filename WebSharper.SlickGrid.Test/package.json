@@ -1,0 +1,10 @@
+{
+  "name": "WebSharper.SlickGrid.Test",
+  "version": "1.0.0",
+  "devDependencies": {
+    "esbuild": "^0.19.9"
+  },
+  "dependencies": {
+    "slickgrid": "^5.18.0"
+  }
+}

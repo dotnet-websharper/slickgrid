@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="WebSharper.SlickGrid.Test/WebSharper.SlickGrid.Test.fsproj" Id="22236c0f-52df-4994-914e-69fede23d474" />
   <Project Path="WebSharper.SlickGrid/WebSharper.SlickGrid.fsproj" />
 </Solution>
