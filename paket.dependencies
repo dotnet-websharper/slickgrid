@@ -1,0 +1,17 @@
+source https://api.nuget.org/v3/index.json
+source https://nuget.pkg.github.com/dotnet-websharper/index.json
+source ../localnuget
+
+framework: net10.0
+
+strategy: min
+storage: none
+
+nuget WebSharper prerelease
+nuget WebSharper.FSharp prerelease
+nuget WebSharper.UI prerelease
+nuget WebSharper.AspNetCore prerelease
+nuget FSharp.Core prerelease
+
+group wsbuild
+    git https://github.com/dotnet-websharper/build-script websharper80

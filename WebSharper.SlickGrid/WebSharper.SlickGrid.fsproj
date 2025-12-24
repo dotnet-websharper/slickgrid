@@ -1,17 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
+
+	<PropertyGroup>
+		<NpmDependencies>
+			<NpmPackage Name=" @aparajita/capacitor-biometric-auth" Version="gt= 5.17.5 lt 5.18.5" ResolutionStrategy="Max" />
+		</NpmDependencies>
+	</PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Main.fs" />
     <None Include="wsconfig.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="WebSharper" Version="10.0.0.651" />    
-    <PackageReference Include="WebSharper.FSharp" Version="10.0.0.651" />
-  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 
 </Project>

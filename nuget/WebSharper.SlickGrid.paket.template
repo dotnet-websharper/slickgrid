@@ -1,0 +1,20 @@
+type file
+id WebSharper.SlickGrid
+authors
+    IntelliFactory
+owners
+    IntelliFactory
+licenseUrl http://websharper.com/licensing
+projectUrl https://github.com/intellifactory/websharper.slickgrid
+description
+    WebSharper Extensions for SlickGrids 2.2
+tags
+    Web JavaScript F# C#
+files
+    ../WebSharper.SlickGrid/bin/Release/net461/WebSharper.SlickGrid.dll ==> lib/net461
+    ../WebSharper.SlickGrid/bin/Release/net461/WebSharper.SlickGrid.xml ==> lib/net461
+    ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.dll ==> lib/netstandard2.0
+    ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.xml ==> lib/netstandard2.0
+dependencies
+        WebSharper ~> LOCKEDVERSION:[3]
+        WebSharper.JQueryUI ~> LOCKEDVERSION:[3]
