@@ -42,7 +42,7 @@ jobs:
         run: dotnet tool run paket restore
 
       - name: Build WebSharper.SlickGrid
-        run: build.cmd WS-BuildRelease 
+        run: ./build.cmd WS-BuildRelease 
 
       - name: Prepare Deployment
         run: |
