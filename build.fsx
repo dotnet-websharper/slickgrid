@@ -1,4 +1,3 @@
-#if INTERACTIVE
 #r "nuget: FAKE.Core"
 #r "nuget: Fake.Core.Target"
 #r "nuget: Fake.IO.FileSystem"
@@ -6,29 +5,39 @@
 #r "nuget: Fake.DotNet.Cli"
 #r "nuget: Fake.DotNet.AssemblyInfoFile"
 #r "nuget: Fake.DotNet.Paket"
-#r "nuget: Paket.Core"
-#else
-#r "paket:
-nuget FAKE.Core
-nuget Fake.Core.Target
-nuget Fake.IO.FileSystem
-nuget Fake.Tools.Git
-nuget Fake.DotNet.Cli
-nuget Fake.DotNet.AssemblyInfoFile
-nuget Fake.DotNet.Paket
-nuget Paket.Core //"
-#endif
+#r "nuget: Paket.Core, 10.0.0-alpha011"
+#r "nuget: MSBuild.StructuredLogger"
+
+open Fake.Core
+System.Environment.GetCommandLineArgs()
+|> Array.skip 2 // skip fsi.exe; build.fsx
+|> Array.toList
+|> Fake.Core.Context.FakeExecutionContext.Create false __SOURCE_FILE__
+|> Fake.Core.Context.RuntimeContext.Fake
+|> Fake.Core.Context.setExecutionContext
 
 #load "paket-files/wsbuild/github.com/dotnet-websharper/build-script/WebSharper.Fake.fsx"
-open Fake.Core
-open Fake.Core.TargetOperators
-open Fake.DotNet
-open Fake.IO
-open Fake.IO.FileSystemOperators
+#r "System.Xml.Linq"
+
+
 open WebSharper.Fake
+open Fake.DotNet
 
-let targets =
-    WSTargets.Default (fun () -> GetSemVerOf "WebSharper" |> ComputeVersion)
-    |> MakeTargets
-
-Target.runOrDefault "Build"
+LazyVersionFrom "WebSharper" |> WSTargets.Default
+|> fun def ->
+    { 
+        def with
+            BuildAction = BuildAction.Solution "*.slnx"
+    }
+|> fun args ->
+    { args with
+        Attributes =
+                [
+                    AssemblyInfo.Company "IntelliFactory"
+                    AssemblyInfo.Copyright "(c) IntelliFactory 2025"
+                    AssemblyInfo.Title "https://github.com/dotnet-websharper/slickgrid"
+                    AssemblyInfo.Product "WebSharper DateFNS 5.18.0+"
+                ]
+    }
+|> MakeTargets
+|> RunTargets

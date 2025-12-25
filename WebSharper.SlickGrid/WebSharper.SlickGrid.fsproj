@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
 	<PropertyGroup>
 		<NpmDependencies>
-			<NpmPackage Name=" @aparajita/capacitor-biometric-auth" Version="gt= 5.17.5 lt 5.18.5" ResolutionStrategy="Max" />
+			<NpmPackage Name="slickgrid" Version="gt= 5.18.0 lt 6.0.0" ResolutionStrategy="Max" />
 		</NpmDependencies>
 	</PropertyGroup>
 

@@ -6,3 +6,4 @@ node_modules
 build
 /WebSharper.SlickGrid.Test/wwwroot/Scripts
 .vite
+paket-files
