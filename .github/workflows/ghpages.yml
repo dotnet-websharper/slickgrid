@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - update-version-5.18.0
+      - master
   workflow_dispatch:
 
 jobs:
@@ -42,11 +42,7 @@ jobs:
         run: dotnet tool run paket restore
 
       - name: Build WebSharper.SlickGrid
-        run: dotnet build WebSharper.SlickGrid/WebSharper.SlickGrid.fsproj
-
-      - name: Build Sample Project in Release mode
-        run: dotnet build --configuration Release
-        working-directory: ./WebSharper.SlickGrid.Test
+        run: build.cmd WS-BuildRelease 
 
       - name: Prepare Deployment
         run: |
