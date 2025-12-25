@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - master
+      - update-version-5.18.0
   workflow_dispatch:
 
 jobs:
