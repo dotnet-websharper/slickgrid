@@ -5,7 +5,7 @@ owners IntelliFactory
 projectUrl https://websharper.com/
 repositoryType git
 licenseUrl http://websharper.com/licensing
-repositoryUrl https://github.com/dotnet-websharper/slickgrid
+repositoryUrl https://github.com/intellifactory/websharper.slickgrid
 iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
 description
     WebSharper bindings for SlickGrid 5.18.0
@@ -14,6 +14,7 @@ tags
 files
     ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.dll ==> lib/netstandard2.0
     ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.xml ==> lib/netstandard2.0
+    ../WebSharper.DateFNS/WebSharper.DateFNS.fsproj ==> src/
 dependencies
     framework: netstandard2.0
         WebSharper ~> LOCKEDVERSION:[3]
