@@ -5,7 +5,7 @@ owners IntelliFactory
 projectUrl https://websharper.com/
 repositoryType git
 licenseUrl http://websharper.com/licensing
-projectUrl https://github.com/dotnet-websharper/slickgrid
+repositoryUrl https://github.com/dotnet-websharper/slickgrid
 iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
 description
     WebSharper bindings for SlickGrid 5.18.0
