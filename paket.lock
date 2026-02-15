@@ -3,7 +3,7 @@ STRATEGY: MIN
 RESTRICTION: || (== net10.0) (== netstandard2.0)
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    FSharp.Core (10.0.101)
+    FSharp.Core (11.0.100-preview1.26104.118)
     HtmlAgilityPack (1.11)
       System.Net.Http (>= 4.3.2)
       System.Xml.XmlDocument (>= 4.3)
@@ -436,22 +436,23 @@ NUGET
       System.Xml.ReaderWriter (>= 4.3)
       System.Xml.XmlDocument (>= 4.3)
       System.Xml.XPath (>= 4.3)
-    WebSharper (10.0.0.652)
+  remote: https://nuget.pkg.github.com/dotnet-websharper/index.json
+    WebSharper (10.1.0.658)
       FSharp.Core (>= 6.0)
       System.Reflection.Emit.Lightweight (>= 4.7)
-    WebSharper.AspNetCore (10.0.0.652)
+    WebSharper.AspNetCore (10.1.0.658)
       Microsoft.AspNetCore.Authentication.Abstractions (>= 2.0)
       Microsoft.AspNetCore.Hosting.Abstractions (>= 2.0)
       Microsoft.AspNetCore.Html.Abstractions (>= 2.0)
       Microsoft.AspNetCore.Mvc.Abstractions (>= 2.0)
       System.Configuration.ConfigurationManager (>= 6.0.2)
       System.Text.Json (>= 8.0.6)
-      WebSharper (10.0.0.652)
-    WebSharper.FSharp (10.0.0.652)
-      WebSharper (10.0.0.652)
-    WebSharper.UI (10.0.0.652)
+      WebSharper (10.1.0.658)
+    WebSharper.FSharp (10.1.0.658)
+      WebSharper (10.1.0.658)
+    WebSharper.UI (10.1.0.658)
       HtmlAgilityPack (>= 1.11)
-      WebSharper (>= 10.0.0.652 < 10.0.1)
+      WebSharper (>= 10.1.0.658 < 10.1.1)
 
 GROUP wsbuild
 
