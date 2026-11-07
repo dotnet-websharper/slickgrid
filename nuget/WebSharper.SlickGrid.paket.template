@@ -13,6 +13,7 @@ tags
     Web JavaScript F# C#
 files
     ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.dll ==> lib/netstandard2.0
+    ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.websharper ==> lib/netstandard2.0
     ../WebSharper.SlickGrid/bin/Release/netstandard2.0/WebSharper.SlickGrid.xml ==> lib/netstandard2.0
     ../WebSharper.SlickGrid/WebSharper.SlickGrid.fsproj ==> src/
 dependencies
