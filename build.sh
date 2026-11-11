@@ -1,8 +1,11 @@
 #!/bin/bash
-    
+set -e
+
 dotnet tool restore
-dotnet paket restore
-dotnet restore
-    
-. paket-files/wsbuild/github.com/dotnet-websharper/build-script/update.sh
-. paket-files/wsbuild/github.com/dotnet-websharper/build-script/build.sh "$@"
+dotnet paket update -g wsbuild --no-install
+
+if [ "$#" -eq 0 ]; then
+    dotnet fsi ./build.fsx
+else
+    dotnet fsi ./build.fsx -t "$@"
+fi
