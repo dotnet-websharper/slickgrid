@@ -4,7 +4,7 @@ open WebSharper
 open WebSharper.JavaScript
 open WebSharper.InterfaceGenerator
 
-// SlickGrid for Version 5.18.0
+// SlickGrid for Version 6.0.0
 module Definition =
 
     let importFromSlickGrid (name: string) (c: CodeModel.Class) = 
@@ -159,10 +159,7 @@ module Definition =
         let name = "DataViewOption"
 
         Pattern.Config name {
-            Required = [
-                "inlineFilters", T<bool>
-                "useCSPSafeFilter", T<bool>
-            ]
+            Required = []
             Optional = [
                 "globalItemMetadataProvider", ItemMetadataProvider.Type
                 "groupItemMetadataProvider", SlickGroupItemMetadataProvider.Type
@@ -449,7 +446,8 @@ module Definition =
                 Required = []
                 Optional = [
                     "clearCopySelectionDelay", T<int>
-                    "clipboardPasteDelay", T<int>
+                    "clipboardWriteOverride", T<string> ^-> (T<unit> + T<Promise<unit>>)
+                    "clipboardReadOverride", T<unit> ^-> (T<string> + T<Promise<string>>)
                     "copiedCellStyle", T<string>
                     "copiedCellStyleLayerKey", T<string>
 
@@ -459,7 +457,6 @@ module Definition =
                     "clipboardCommandHandler", T<obj> ^-> T<unit>
 
                     "includeHeaderWhenCopying", T<bool>
-                    "bodyElement", HTMLElement
 
                     "onCopyInit", T<unit> ^-> T<unit>
                     "onCopySuccess", T<int> ^-> T<unit>
@@ -523,6 +520,72 @@ module Definition =
             "cancelCurrentEdit" => T<unit> ^-> T<bool>
         ]        
 
+    // --- Pinning / sticky docking (new in SlickGrid 6) ---
+
+    let PinnedColumns =
+        let name = "PinnedColumns"
+
+        Pattern.Config name {
+            Required = []
+            Optional = [
+                "left", T<int> + (!| (T<int> + T<string>))
+                "right", T<int> + (!| (T<int> + T<string>))
+            ]
+        }
+        |> importFromSlickGrid name
+
+    let PinnedRows =
+        let name = "PinnedRows"
+
+        Pattern.Config name {
+            Required = []
+            Optional = [
+                "top", !| (T<int> + T<string>)
+                "bottom", !| (T<int> + T<string>)
+            ]
+        }
+        |> importFromSlickGrid name
+
+    let PinningOption =
+        let name = "PinningOption"
+
+        Pattern.Config name {
+            Required = []
+            Optional = [
+                "columns", PinnedColumns.Type
+                "rows", PinnedRows.Type
+            ]
+        }
+        |> importFromSlickGrid name
+
+    let StickyRows =
+        let name = "StickyRows"
+
+        Pattern.Config name {
+            Required = []
+            Optional = [
+                "top", !| (T<int> + T<string>)
+                "bottom", !| (T<int> + T<string>)
+                "both", !| (T<int> + T<string>)
+            ]
+        }
+        |> importFromSlickGrid name
+
+    let DockingOption =
+        let name = "DockingOption"
+
+        Pattern.Config name {
+            Required = []
+            Optional = [
+                "maxColumnViewportWidthPercent", T<int>
+                "maxRowViewportHeightPercent", T<int>
+                "minCenterRowCount", T<int>
+                "overflowStrategy", T<string>
+                "stickyActivationBuffer", T<int>
+            ]
+        }
+        |> importFromSlickGrid name
+
     let GridOption =
         Generic - fun t ->
             let name = "GridOption"
@@ -531,6 +594,10 @@ module Definition =
             |> importFromSlickGrid name
             |+> Pattern.RequiredFields []
             |+> Pattern.OptionalFields [
+                "allowDragFromClosest", T<string>
+                "docking", DockingOption.Type
+                "pinning", PinningOption.Type
+                "stickyRows", StickyRows.Type
                 "addNewRowCssClass", T<string>
                 "alwaysAllowHorizontalScroll", T<bool>
                 "alwaysShowVerticalScroll", T<bool>
@@ -545,12 +612,16 @@ module Definition =
                 "autoEditByKeypress", T<bool>
                 "autoEditNewRow", T<bool>
                 "autoHeight", T<bool>
+                "autoHeaderHeight", T<bool>
+                "autoScrollOnColumnResize", T<bool>
                 "autosizeColsMode", T<string>
                 "autosizeColPaddingPx", T<int>
                 "autosizeTextAvgToMWidthRatio", T<float>
                 "cellFlashingCssClass", T<string>
                 "cellMenu", CellMenuOption.Type
+                "colAutosizeTreatAsLockedBelowWidth", T<int>
                 "columnPicker", ColumnPickerOption.Type
+                "columnResizingDelay", T<int>
                 "contextMenu", ContextMenuOption.Type
                 "createFooterRow", T<bool>
                 "createPreHeaderPanel", T<bool>
@@ -579,6 +650,7 @@ module Definition =
                 "enableCellNavigation", T<bool>
                 "editorCellNavOnLRKeys", T<bool>
                 "enableCellRowSpan", T<bool>
+                "enableVariableRowHeight", T<bool>
                     
                 "unorderableColumnCssClass", T<string>
                 "enableHtmlRendering", T<bool>
@@ -593,10 +665,6 @@ module Definition =
                     
                 "formatterFactory", FormatterFactory.[T<obj>]
                     
-                "frozenBottom", T<bool>
-                "frozenColumn", T<int>
-                "frozenRow", T<int>
-                "frozenRightViewportMinWidth", T<int>
                 "fullWidthRows", T<bool>
                 "gridMenu", GridMenuOption.Type
                 "headerRowHeight", T<int>
@@ -617,9 +685,10 @@ module Definition =
                 "preserveCopiedSelectionOnPaste", T<bool>
                 "preventDragFromKeys", !| T<string>
                 "rowHeight", T<int>
+                "rowHeightProvider", (T<obj> * T<int> * t) ^-> T<int>
                 "rowHighlightCssClass", T<string>
                 "rowHighlightDuration", T<int>
-                "rowTopOffsetRenderType", T<string>
+                "rtl", T<bool>
                 "sanitizer", T<string> ^-> T<string>
                 "scrollRenderThrottling", T<int>
                 "selectedCellCssClass", T<string>
@@ -632,24 +701,21 @@ module Definition =
                 "showTopPanel", T<bool>
                 "sortColNumberInSeparateSpan", T<bool>
                 "shadowRoot", T<Dom.ShadowRoot>
+                "spreadHiddenColspan", T<bool>
                 "suppressActiveCellChangeOnEdit", T<bool>
                 "suppressCssChangesOnHiddenInit", T<bool>
                 "syncColumnCellResize", T<bool>
-                "skipFreezeColumnValidation", T<bool>
-                "throwWhenFrozenNotAllViewable", T<bool>
-                "invalidColumnFreezePickerMessage", T<string>
-                "invalidColumnFreezePickerCallback", T<string> ^-> T<unit>
-                "invalidColumnFreezeWidthMessage", T<string>
-                "invalidColumnFreezeWidthCallback", T<string> ^-> T<unit>
+                "skipPinningValidation", T<bool>
+                "errorCallback", T<string> ^-> T<unit>
+                "invalidColumnPinningPickerMessage", T<string>
+                "invalidColumnPinningSequenceMessage", T<string>
+                "invalidColumnPinningWidthMessage", T<string>
                 "topPanelHeight", T<int>
                 "tristateMultiColumnSort", T<bool>
                 "viewportClass", T<string>
                 "viewportSwitchToScrollModeWidthPercent", T<int>
                 "viewportMinWidthPx", T<int>
                 "viewportMaxWidthPx", T<int>
-                "columnPickerTitle", T<string>
-                "forceFitTitle", T<string>
-                "syncResizeTitle", T<string>
             ]
 
     let CustomDataView =
@@ -682,12 +748,13 @@ module Definition =
                 "getDataItem" => T<int>?i ^-> tData
                 "setData" => (CustomDataView.[tData] + !| tData)?newData * !?T<bool>?scrollToTop ^-> T<unit>
                 "getColumns" => T<unit> ^-> !| Column.[tData]
-                "setColumns" => (!| Column.[tData])?columnDefinitions ^-> T<unit>
+                "setColumns" => (!| Column.[tData])?columnDefinitions * !?T<bool>?waitNextCycle ^-> T<bool>
                 "getVisibleColumns" => T<unit> ^-> !| Column.[tData]
+                "getColumnById" => (T<string> + T<int>)?id ^-> Column.[tData]
+                "getVisibleColumnIndex" => (T<string> + T<int>)?id ^-> T<int>
+                "updateColumnById" => (T<string> + T<int>)?columnId * Column.[tData]?props * !?T<bool>?forceColumnUpdate ^-> T<unit>
                 "getHeader" => Column.[tData]?columnDef ^-> (HTMLDivElement + !| HTMLDivElement)
-                "validateSetColumnFreeze" => (!| Column.[tData])?newColumns * !?T<bool>?forceAlert ^-> T<bool>
-                "calculateFrozenColumnIndexById" => (!| Column.[tData])?newColumns * !?(T<string> + T<int>)?columnId * !?T<bool>?applyIndexChange ^-> T<int>
-            ]    
+            ]
 
     let GroupTotalsFormatter = T<obj> * Column.[T<obj>] * Grid.[T<obj>] ^-> T<string>
 
@@ -988,20 +1055,6 @@ module Definition =
         }
         |> importFromSlickGrid name
 
-    let OnBeforeAppendCellEventArgs = 
-        let name = "OnBeforeAppendCellEventArgs"
-
-        Pattern.Config name {
-            Required = StandardFields @ [ 
-                "row", T<int>
-                "cell", T<int>
-                "value", T<obj>
-                "dataContext", T<obj> 
-            ]
-            Optional = []
-        }
-        |> importFromSlickGrid name
-
     let OnBeforeCellEditorDestroyEventArgs = 
         let name = "OnBeforeCellEditorDestroyEventArgs"
 
@@ -1266,6 +1319,15 @@ module Definition =
 
         Pattern.Config name {
             Required = StandardFields @ [ "column", Column.[T<obj>] ]
+            Optional = []
+        }
+        |> importFromSlickGrid name
+
+    let OnHeaderKeyDownEventArgs = 
+        let name = "OnHeaderKeyDownEventArgs"
+
+        Pattern.Config name {
+            Required = StandardFields @ [ "event", DOMEvent; "column", Column.[T<obj>] ]
             Optional = []
         }
         |> importFromSlickGrid name
@@ -1609,7 +1671,7 @@ module Definition =
                     "headerRowFormatter", Formatter t Column.[t]
                     "formatter", Formatter t Column.[t]
 
-                    "hideArrow", T<bool>
+                    "bodyClassName", T<string>
                     "className", T<string>
                 
                     "maxHeight", T<int>
@@ -1619,13 +1681,19 @@ module Definition =
                     "offsetTopBottom", T<int>
                     "position", T<string>
 
+                    "repositionByMouseOverTarget", T<bool>
                     "useRegularTooltip", T<bool>
                     "useRegularTooltipFromFormatterOnly", T<bool>
+                    "useRegularTooltipFromCellTextOnly", T<bool>
                     "renderRegularTooltipAsHtml", T<bool>
                 
                     "tooltipTextMaxLength", T<int>
                     "regularTooltipWhiteSpace", T<string>
                     "whiteSpace", T<string>
+                    "persistOnHover", T<bool>
+                    "autoHideDelay", T<int>
+                    "observeAllTooltips", T<bool>
+                    "observeTooltipContainer", T<string>
 
                     "usabilityOverride", UsabilityOverrideArgs.[t]?args ^-> T<bool>
                 ]
@@ -1773,9 +1841,6 @@ module Definition =
                     "divider", T<bool> + T<string>
                     "hidden", T<bool>
                     "commandItems", !| (TSelf + T<string>)
-                
-                    // Deprecated 'items'
-                    "items", !| (TSelf + T<string>) 
                 ]
             }
             |> importFromSlickGrid name
@@ -1800,9 +1865,7 @@ module Definition =
         Pattern.Config name {
             Required = []
             Optional = [
-                "commandItems", !| (HeaderMenuCommandItem + T<string>)
-                
-                "items", !| (HeaderMenuCommandItem + T<string>)
+                ("commandItems", !| (HeaderMenuCommandItem + T<string>))
             ]
         }
         |> importFromSlickGrid name
@@ -2138,9 +2201,7 @@ module Definition =
             "setPagingOptions" => PagingInfo?args ^-> T<unit>
             "getPagingInfo" => T<unit> ^-> PagingInfo
 
-            "fastSort" => (T<string> + (T<unit> ^-> T<string>))?field * !?T<bool>?ascending ^-> T<unit>
-            "reSort" => T<unit> ^-> T<unit>   
-            
+            "reSort" => T<unit> ^-> T<unit>
             "getFilteredItemCount" => T<unit> ^-> T<int>    
             "getGrouping" => T<unit> ^-> !| Grouping.[T<obj>]
             "setGrouping" => (Grouping.[T<obj>] + !| Grouping.[T<obj>])?groupingInfo ^-> T<unit>    
@@ -2202,11 +2263,11 @@ module Definition =
             "denyPaste", T<bool>
             "disableTooltip", T<bool>
             "editor", Editor.Type
+            "editorAriaLabel", T<string>
             "editorFixedDecimalPlaces", T<int>
             "excludeFromColumnPicker", T<bool>
             "excludeFromExport", T<bool>
             "excludeFromGridMenu", T<bool>
-            "excludeFromQuery", T<bool>
             "excludeFromHeaderMenu", T<bool>
             "focusable", T<bool>
             "formatterOverride", T<obj> + FormatterOverrideCallback
@@ -2220,6 +2281,7 @@ module Definition =
             "name", T<string> + HTMLElement + DocumentFragment
             "offsetWidth", T<int>
             "params", T<obj>
+            "pinned", T<string>
             "previousWidth", T<int>
             "reorderable", T<bool>
             "rerenderOnResize", T<bool>
@@ -2227,6 +2289,7 @@ module Definition =
             "rowspan", T<int>
             "selectable", T<bool>
             "sortable", T<bool>
+            "sticky", T<string> + T<bool>
             "toolTip", T<string>
             "unselectable", T<bool>
             "validator", EditorValidator
@@ -2375,8 +2438,12 @@ module Definition =
             "scrollRowToTop" => T<int>?row ^-> T<unit>
             "scrollCellIntoView" => T<int>?row * T<int>?cell * !?T<bool>?doPaging ^-> T<unit>
             "scrollColumnIntoView" => T<int>?cell ^-> T<unit>
-            "getFrozenRowOffset" => T<int>?row ^-> T<int>
-            "getFrozenColumnId" => T<unit> ^-> (T<string> + T<int>)
+            "getRowTop" => T<int>?row ^-> T<int>
+            "invalidateRowHeights" => T<unit> ^-> T<unit>
+            "getPinnedColumns" => !?T<string>?side ^-> !| Column.[T<obj>]
+            "setColumnPinning" => (T<string> + T<int>)?columnId * T<string>?pinned ^-> T<unit>
+            "setColumnStickiness" => (T<string> + T<int>)?columnId * !?(T<string> + T<bool>)?sticky ^-> T<unit>
+            "validateColumnPinning" => !?(T<string> + T<int>)?columnId * !?T<bool>?forceAlert * !?(!| Column.[T<obj>])?columns ^-> T<bool>
 
             "addCellCssStyles" => T<string>?key * T<obj>?hash ^-> T<unit>
             "removeCellCssStyles" => T<string>?key ^-> T<unit>
@@ -2406,8 +2473,6 @@ module Definition =
             "remapAllColumnsRowSpan" => T<unit> ^-> T<unit>
             "findSpanStartingCell" => T<int>?row * T<int>?cell ^-> CellResult
 
-            "validateColumnFreezeWidth" => !?T<int>?frozenColumn * !?T<bool>?forceAlert ^-> T<bool>
-                
             // --- Events with Strict Types ---
             "onActiveCellChanged" =? SlickEvent.[OnActiveCellChangedEventArgs]
             "onActiveCellPositionChanged" =? SlickEvent.[OnActiveCellPositionChangedEventArgs]
@@ -2415,7 +2480,6 @@ module Definition =
             "onActivateChangedOptions" =? SlickEvent.[OnActivateChangedOptionsEventArgs]
             "onAfterSetColumns" =? SlickEvent.[OnAfterSetColumnsEventArgs]
             "onAutosizeColumns" =? SlickEvent.[OnAutosizeColumnsEventArgs]
-            "onBeforeAppendCell" =? SlickEvent.[OnBeforeAppendCellEventArgs]
             "onBeforeCellEditorDestroy" =? SlickEvent.[OnBeforeCellEditorDestroyEventArgs]
             "onBeforeColumnsResize" =? SlickEvent.[OnBeforeColumnsResizeEventArgs]
             "onBeforeDestroy" =? SlickEvent.[OnBeforeDestroyEventArgs]
@@ -2448,11 +2512,16 @@ module Definition =
             "onHeaderCellRendered" =? SlickEvent.[OnHeaderCellRenderedEventArgs]
             "onHeaderClick" =? SlickEvent.[OnHeaderClickEventArgs]
             "onHeaderContextMenu" =? SlickEvent.[OnHeaderContextMenuEventArgs]
+            "onHeaderKeyDown" =? SlickEvent.[OnHeaderKeyDownEventArgs]
             "onHeaderMouseEnter" =? SlickEvent.[OnHeaderMouseEventArgs]
             "onHeaderMouseLeave" =? SlickEvent.[OnHeaderMouseEventArgs]
+            "onHeaderMouseOver" =? SlickEvent.[OnHeaderMouseEventArgs]
+            "onHeaderMouseOut" =? SlickEvent.[OnHeaderMouseEventArgs]
             "onHeaderRowCellRendered" =? SlickEvent.[OnHeaderRowCellRenderedEventArgs]
             "onHeaderRowMouseEnter" =? SlickEvent.[OnHeaderMouseEventArgs]
             "onHeaderRowMouseLeave" =? SlickEvent.[OnHeaderMouseEventArgs]
+            "onHeaderRowMouseOver" =? SlickEvent.[OnHeaderMouseEventArgs]
+            "onHeaderRowMouseOut" =? SlickEvent.[OnHeaderMouseEventArgs]
             "onPreHeaderContextMenu" =? SlickEvent.[OnPreHeaderContextMenuEventArgs]
             "onPreHeaderClick" =? SlickEvent.[OnPreHeaderClickEventArgs]
             "onKeyDown" =? SlickEvent.[OnKeyDownEventArgs]
@@ -2470,9 +2539,6 @@ module Definition =
 
     GridMenuItem 
         |+> Pattern.OptionalFields [
-            // Deprecated: customItems
-            "customItems", !| (GridMenuItem + T<string>)     
-            
             "itemVisibilityOverride", GridMenuCallbackArgs ^-> T<bool>        
             "itemUsabilityOverride", GridMenuCallbackArgs ^-> T<bool>
             "action", (SlickEventData.[T<obj>] + DOMEvent) * GridMenuCommandItemCallbackArgs ^-> T<unit>
@@ -2591,8 +2657,6 @@ module Definition =
         |+> Pattern.OptionalFields [
                 "commandTitle", T<string>
                 "commandItems", !| (MenuCommandItem + T<string>)
-                "customTitle", T<string>
-                "customItems", !| (GridMenuItem + T<string>)
                 "contentMinWidth", T<int>
                 "columnTitle", T<string>
                 "forceFitTitle", T<string>
@@ -2607,7 +2671,6 @@ module Definition =
                 "maxHeight", T<int> + T<string>
                 "maxWidth", T<int> + T<string>
                 "menuWidth", T<int>
-                "resizeOnShowHeaderRow", T<bool>
                 "showButton", T<bool>
                 "subItemChevronClass", T<string>
                 "subMenuOpenByEvent", T<string>
@@ -2657,7 +2720,6 @@ module Definition =
                 OnActivateChangedOptionsEventArgs
                 OnAfterSetColumnsEventArgs
                 OnAutosizeColumnsEventArgs
-                OnBeforeAppendCellEventArgs
                 OnBeforeCellEditorDestroyEventArgs
                 OnBeforeColumnsResizeEventArgs
                 OnBeforeDestroyEventArgs
@@ -2684,6 +2746,7 @@ module Definition =
                 OnHeaderCellRenderedEventArgs
                 OnHeaderClickEventArgs
                 OnHeaderContextMenuEventArgs
+                OnHeaderKeyDownEventArgs
                 OnHeaderMouseEventArgs
                 OnHeaderRowCellRenderedEventArgs
                 OnPreHeaderClickEventArgs
@@ -2714,6 +2777,11 @@ module Definition =
                 OnColumnsChangedArgs
                 ColumnPickerOption
                 ContextMenuOption
+                PinnedColumns
+                PinnedRows
+                PinningOption
+                StickyRows
+                DockingOption
                 GridOption
                 GridMenuOption
                 ExcelCopyBufferOption

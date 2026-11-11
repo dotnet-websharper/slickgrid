@@ -1,0 +1,153 @@
+/* Page chrome palette. Light is the default; [data-theme="dark"] flips it. */
+:root {
+    color-scheme: light;
+    --page-bg: #eef1f6;
+    --page-surface: #ffffff;
+    --page-text: #1f2937;
+    --page-muted: #64748b;
+    --page-border: #d7dee8;
+    --page-accent: #2563eb;
+    --page-accent-contrast: #ffffff;
+    --page-shadow: 0 10px 24px -16px rgb(15 23 42 / 0.45);
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --page-bg: #0b1220;
+    --page-surface: #111c30;
+    --page-text: #e5eaf3;
+    --page-muted: #93a1b5;
+    --page-border: #23324a;
+    --page-accent: #3b82f6;
+    --page-accent-contrast: #f8fafc;
+    --page-shadow: 0 10px 24px -16px rgb(0 0 0 / 0.7);
+
+    /* Light up the SlickGrid alpine theme (it reads these with light fallbacks). */
+    --slick-grid-bgcolor: #111c30;
+    --slick-bg-color: #111c30;
+    --slick-canvas-bg-color: #111c30;
+    --slick-odd-row-color: #0e1729;
+    --slick-row-mouse-hover-color: #1b2a44;
+    --slick-header-bg-color: #0b1424;
+    --slick-header-color: #e5eaf3;
+    --slick-headerrow-bg-color: #0e1729;
+    --slick-header-footer-bg-color: #0b1424;
+    --slick-font-color: #e5eaf3;
+    --slick-border-color: #23324a;
+    --slick-cell-border-color: #1c2940;
+    --slick-cell-selected-bg-color: #1d4ed8;
+    --slick-cell-selected-color: #f8fafc;
+    --slick-menu-bg-color: #111c30;
+    --slick-menu-color: #e5eaf3;
+    --slick-menu-border: 1px solid #23324a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--page-bg);
+    color: var(--page-text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--page-accent);
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 18px 28px;
+    background: var(--page-surface);
+    border-bottom: 1px solid var(--page-border);
+}
+
+.app-titles h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+}
+
+.app-titles p {
+    margin: 4px 0 0;
+    color: var(--page-muted);
+    font-size: 0.9rem;
+}
+
+.app-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.app-source {
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.btn {
+    cursor: pointer;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 0.88rem;
+    color: var(--page-text);
+    background: var(--page-surface);
+    border: 1px solid var(--page-border);
+    border-radius: 8px;
+    transition: background 120ms ease, border-color 120ms ease;
+}
+
+.btn:hover {
+    border-color: var(--page-accent);
+}
+
+.btn-primary {
+    color: var(--page-accent-contrast);
+    background: var(--page-accent);
+    border-color: var(--page-accent);
+}
+
+.theme-toggle {
+    min-width: 148px;
+}
+
+.page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 24px 28px 40px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.status {
+    margin: 12px 2px 0;
+    color: var(--page-muted);
+    font-size: 0.9rem;
+}
+
+/* SlickGrid needs an explicitly sized container. */
+#myGrid {
+    height: 62vh;
+    min-height: 420px;
+    background: var(--page-surface);
+    box-shadow: var(--page-shadow);
+}

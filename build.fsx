@@ -36,7 +36,7 @@ LazyVersionFrom "WebSharper" |> WSTargets.Default
                     AssemblyInfo.Company "IntelliFactory"
                     AssemblyInfo.Copyright "(c) IntelliFactory 2025"
                     AssemblyInfo.Title "https://github.com/dotnet-websharper/slickgrid"
-                    AssemblyInfo.Product "WebSharper SlickGrid 5.18.0+"
+                    AssemblyInfo.Product "WebSharper SlickGrid 6.0.0+"
                 ]
     }
 |> MakeTargets

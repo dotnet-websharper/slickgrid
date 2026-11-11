@@ -7,3 +7,4 @@ build
 /WebSharper.SlickGrid.Test/wwwroot/Scripts
 .vite
 paket-files
+dist
